@@ -191,6 +191,39 @@ listen 8080;  # 改为您需要的端口
 3. **使用CDN**：考虑使用CDN加速静态资源
 4. **监控性能**：使用工具如htop监控服务器性能
 
+## 🗑️ 卸载网站
+
+### 完整卸载
+```bash
+# 完全删除网站和所有相关组件
+sudo ./uninstall.sh
+
+# 删除但保留Nginx服务器
+sudo ./uninstall.sh --keep-nginx
+
+# 删除前创建完整备份
+sudo ./uninstall.sh --backup
+
+# 保留SSL证书
+sudo ./uninstall.sh --keep-ssl
+
+# 查看所有选项
+./uninstall.sh --help
+```
+
+### 快速删除
+```bash
+# 只删除网站文件，保留服务器环境
+sudo ./quick-remove.sh
+```
+
+### 卸载选项对比
+
+| 脚本 | 删除网站 | 删除Nginx | 删除SSL | 删除Node.js | 创建备份 | 用途 |
+|------|---------|-----------|---------|-------------|----------|------|
+| `uninstall.sh` | ✅ | 可选 | 可选 | 可选 | 可选 | 完整卸载 |
+| `quick-remove.sh` | ✅ | ❌ | ❌ | ❌ | ❌ | 快速清理 |
+
 ---
 
 **恭喜！** 🎉 您的包装工具网站现在已经成功部署在VPS上了！
