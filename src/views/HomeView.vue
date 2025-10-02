@@ -108,6 +108,7 @@ const tools = ref([
     description: '快速生成用于包装印刷的高分辨率二维码。',
     icon: QrCode,
     category: '内容与营销',
+    path: '/tools/qr-code-generator',
   },
   {
     name: '包装营销词生成器',

@@ -10,6 +10,7 @@ import PaperWeightThicknessConverterView from '../views/PaperWeightThicknessConv
 import PackagingMaterialDatabaseView from '../views/PackagingMaterialDatabaseView.vue';
 import PrepressChecklistView from '../views/PrepressChecklistView.vue';
 import ProjectTimelineEstimatorView from '../views/ProjectTimelineEstimatorView.vue';
+import QRCodeGeneratorView from '../views/QRCodeGeneratorView.vue';
 
 const routes = [
   {
@@ -66,6 +67,11 @@ const routes = [
     path: '/tools/project-timeline-estimator',
     name: 'ProjectTimelineEstimator',
     component: ProjectTimelineEstimatorView,
+  },
+  {
+    path: '/tools/qr-code-generator',
+    name: 'QRCodeGenerator',
+    component: QRCodeGeneratorView,
   },
 ];
 
