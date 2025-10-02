@@ -101,6 +101,7 @@ const tools = ref([
     description: '快速估算项目总耗时，为客户提供合理的交付预期。',
     icon: Calendar,
     category: '项目与协作',
+    path: '/tools/project-timeline-estimator',
   },
   {
     name: '包装专用二维码生成器',

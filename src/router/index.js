@@ -9,6 +9,7 @@ import PackagingIconsView from '../views/PackagingIconsView.vue';
 import PaperWeightThicknessConverterView from '../views/PaperWeightThicknessConverterView.vue';
 import PackagingMaterialDatabaseView from '../views/PackagingMaterialDatabaseView.vue';
 import PrepressChecklistView from '../views/PrepressChecklistView.vue';
+import ProjectTimelineEstimatorView from '../views/ProjectTimelineEstimatorView.vue';
 
 const routes = [
   {
@@ -60,6 +61,11 @@ const routes = [
     path: '/tools/prepress-checklist',
     name: 'PrepressChecklist',
     component: PrepressChecklistView,
+  },
+  {
+    path: '/tools/project-timeline-estimator',
+    name: 'ProjectTimelineEstimator',
+    component: ProjectTimelineEstimatorView,
   },
 ];
 
