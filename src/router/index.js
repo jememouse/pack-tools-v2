@@ -12,6 +12,7 @@ import PrepressChecklistView from '../views/PrepressChecklistView.vue';
 import ProjectTimelineEstimatorView from '../views/ProjectTimelineEstimatorView.vue';
 import QRCodeGeneratorView from '../views/QRCodeGeneratorView.vue';
 import PackagingStandardsView from '../views/PackagingStandardsView.vue';
+import ColorRecommendationView from '../views/ColorRecommendationView.vue';
 // Knowledge pages
 import { 
   RgbVsCmykView,
@@ -82,6 +83,11 @@ const routes = [
     path: '/tools/qr-code-generator',
     name: 'QRCodeGenerator',
     component: QRCodeGeneratorView,
+  },
+  {
+    path: '/tools/color-recommendation',
+    name: 'ColorRecommendation',
+    component: ColorRecommendationView,
   },
   // Knowledge routes
   {

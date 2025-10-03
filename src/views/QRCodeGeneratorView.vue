@@ -345,6 +345,9 @@ import {
   CheckCircle
 } from 'lucide-vue-next';
 
+// 调试日志
+console.log('QRCode library loaded:', QRCode);
+
 const showHelp = ref(false);
 const qrCanvas = ref(null);
 const qrCodeDataURL = ref('');
@@ -406,53 +409,95 @@ const sizes = ref([
 
 onMounted(() => {
   loadHistory();
+  // 添加初始演示内容
+  if (!qrConfig.text) {
+    qrConfig.text = 'https://github.com/jememouse/pack-tools-v2';
+    // 延迟生成，确保DOM已加载
+    setTimeout(() => {
+      updateQRCode();
+    }, 100);
+  }
 });
 
 const updateQRCode = async () => {
+  console.log('开始生成二维码...', { text: qrConfig.text, config: qrConfig });
+  
   if (!qrConfig.text.trim()) {
+    console.log('内容为空，清空二维码');
     qrCodeDataURL.value = '';
     return;
   }
 
   try {
+    // 等待DOM更新
+    await nextTick();
+    
+    const options = {
+      width: qrConfig.size,
+      errorCorrectionLevel: qrConfig.errorCorrectionLevel,
+      color: {
+        dark: qrConfig.color.dark,
+        light: qrConfig.color.light
+      },
+      margin: qrConfig.margin
+    };
+    
+    console.log('生成选项:', options);
+
     if (qrConfig.format === 'svg') {
       // SVG格式
+      console.log('生成SVG格式二维码...');
       const svgString = await QRCode.toString(qrConfig.text, {
-        type: 'svg',
-        width: qrConfig.size,
-        errorCorrectionLevel: qrConfig.errorCorrectionLevel,
-        color: qrConfig.color,
-        margin: qrConfig.margin
+        ...options,
+        type: 'svg'
       });
       
+      console.log('SVG生成成功，长度:', svgString.length);
       const blob = new Blob([svgString], { type: 'image/svg+xml' });
       qrCodeDataURL.value = URL.createObjectURL(blob);
     } else {
       // PNG格式 - 使用Canvas
-      await nextTick();
-      if (qrCanvas.value) {
-        await QRCode.toCanvas(qrCanvas.value, qrConfig.text, {
-          width: qrConfig.size,
-          errorCorrectionLevel: qrConfig.errorCorrectionLevel,
-          color: qrConfig.color,
-          margin: qrConfig.margin
-        });
-        qrCodeDataURL.value = qrCanvas.value.toDataURL('image/png');
+      console.log('生成PNG格式二维码...');
+      
+      if (!qrCanvas.value) {
+        console.error('Canvas元素未找到');
+        message.value = 'Canvas元素未找到，请刷新页面重试';
+        return;
       }
+      
+      // 先清空canvas
+      const ctx = qrCanvas.value.getContext('2d');
+      ctx.clearRect(0, 0, qrCanvas.value.width, qrCanvas.value.height);
+      
+      // 生成二维码到canvas
+      await QRCode.toCanvas(qrCanvas.value, qrConfig.text, options);
+      
+      // 获取DataURL
+      qrCodeDataURL.value = qrCanvas.value.toDataURL('image/png');
+      console.log('PNG生成成功，DataURL长度:', qrCodeDataURL.value.length);
     }
 
     // 添加到历史记录
     addToHistory();
+    
+    // 显示成功消息
+    message.value = '二维码生成成功！';
+    setTimeout(() => message.value = '', 3000);
+    
   } catch (error) {
     console.error('生成二维码失败:', error);
-    message.value = '生成失败，请检查输入内容';
-    setTimeout(() => message.value = '', 3000);
+    message.value = `生成失败: ${error.message}`;
+    setTimeout(() => message.value = '', 5000);
   }
 };
 
 const useTemplate = (template) => {
+  console.log('使用模板:', template.name, template.template);
   qrConfig.text = template.template;
-  updateQRCode();
+  // 延迟一下确保输入框更新
+  nextTick(() => {
+    updateQRCode();
+  });
 };
 
 const resetConfig = () => {
@@ -466,21 +511,34 @@ const resetConfig = () => {
 };
 
 const downloadQR = () => {
-  if (!qrCodeDataURL.value) return;
-
-  const link = document.createElement('a');
-  link.download = `qrcode-${Date.now()}.${qrConfig.format}`;
+  console.log('开始下载二维码...', { format: qrConfig.format, hasDataURL: !!qrCodeDataURL.value });
   
-  if (qrConfig.format === 'svg') {
-    link.href = qrCodeDataURL.value;
-  } else {
-    link.href = qrCodeDataURL.value;
+  if (!qrCodeDataURL.value) {
+    console.error('没有二维码数据可下载');
+    message.value = '请先生成二维码';
+    setTimeout(() => message.value = '', 3000);
+    return;
   }
-  
-  link.click();
-  
-  message.value = '二维码下载成功！';
-  setTimeout(() => message.value = '', 3000);
+
+  try {
+    const link = document.createElement('a');
+    const timestamp = new Date().toISOString().slice(0, 19).replace(/[T:]/g, '-');
+    link.download = `qrcode-${timestamp}.${qrConfig.format}`;
+    link.href = qrCodeDataURL.value;
+    
+    // 添加到文档中并点击
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    console.log('下载成功');
+    message.value = '二维码下载成功！';
+    setTimeout(() => message.value = '', 3000);
+  } catch (error) {
+    console.error('下载失败:', error);
+    message.value = '下载失败，请重试';
+    setTimeout(() => message.value = '', 3000);
+  }
 };
 
 const copyToClipboard = async () => {

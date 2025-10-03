@@ -15,7 +15,8 @@ import {
   Book,
   Box,
   Layers,
-  Thermometer
+  Thermometer,
+  Sparkles
 } from 'lucide-vue-next';
 import ToolCard from '../components/ToolCard.vue';
 import KnowledgeCard from '../components/KnowledgeCard.vue';
@@ -55,6 +56,13 @@ const tools = ref([
     icon: BrainCircuit,
     category: '设计与印前',
     path: '/tools/color-difference',
+  },
+  {
+    name: '色彩智能推荐工具',
+    description: '输入一个基础色彩，智能生成专业配色方案、渐变组合和包装应用建议。',
+    icon: Sparkles,
+    category: '设计与印前',
+    path: '/tools/color-recommendation',
   },
   {
     name: '包装常用图标库',
