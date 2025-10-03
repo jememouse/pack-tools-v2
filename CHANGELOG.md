@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+## v0.1.2 - 2025-10-03
+- 修复版本管理脚本的标签识别问题
+
 ## v0.1.1 - 2025-10-03
 - 完善版本管理与SEO检查脚本
 
