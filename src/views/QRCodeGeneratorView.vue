@@ -230,13 +230,16 @@
           <div class="flex flex-col lg:flex-row gap-6 h-full">
             <!-- 预览区域 -->
             <div class="flex-1">
+              <!-- 空状态 -->
               <div v-if="!qrCodeDataURL" class="flex flex-col items-center justify-center h-80 border-2 border-dashed border-gray-600 rounded-lg">
                 <QrCode class="w-16 h-16 text-gray-500 mb-4" />
                 <p class="text-gray-400 text-center">
                   请输入内容生成二维码
                 </p>
               </div>
-              <div v-else class="flex flex-col items-center">
+              
+              <!-- 二维码预览 -->
+              <div v-show="qrCodeDataURL" class="flex flex-col items-center">
                 <div class="relative inline-block p-4 bg-white rounded-lg shadow-lg">
                   <canvas
                     ref="qrCanvas"
@@ -253,6 +256,13 @@
                   </div>
                 </div>
               </div>
+              
+              <!-- 隐藏的Canvas用于生成 -->
+              <canvas
+                v-show="false"
+                ref="qrCanvasHidden"
+                class="hidden"
+              />
             </div>
 
             <!-- 规格信息 -->
@@ -350,6 +360,7 @@ console.log('QRCode library loaded:', QRCode);
 
 const showHelp = ref(false);
 const qrCanvas = ref(null);
+const qrCanvasHidden = ref(null);
 const qrCodeDataURL = ref('');
 const message = ref('');
 const history = ref([]);
@@ -407,16 +418,26 @@ const sizes = ref([
   { label: '2048px (超高清)', value: 2048 }
 ]);
 
-onMounted(() => {
+onMounted(async () => {
   loadHistory();
   // 添加初始演示内容
   if (!qrConfig.text) {
     qrConfig.text = 'https://github.com/jememouse/pack-tools-v2';
-    // 延迟生成，确保DOM已加载
-    setTimeout(() => {
-      updateQRCode();
-    }, 100);
   }
+  
+  // 等待DOM完全渲染
+  await nextTick();
+  
+  // 再等待一下确保所有组件都已挂载
+  setTimeout(() => {
+    console.log('初始化检查Canvas元素:', {
+      display: qrCanvas.value,
+      hidden: qrCanvasHidden.value
+    });
+    if (qrConfig.text) {
+      updateQRCode();
+    }
+  }, 500); // 增加延迟时间
 });
 
 const updateQRCode = async () => {
@@ -459,22 +480,58 @@ const updateQRCode = async () => {
       // PNG格式 - 使用Canvas
       console.log('生成PNG格式二维码...');
       
-      if (!qrCanvas.value) {
-        console.error('Canvas元素未找到');
-        message.value = 'Canvas元素未找到，请刷新页面重试';
-        return;
+      // 等待隐藏Canvas元素就绪
+      let retryCount = 0;
+      const maxRetries = 10;
+      
+      while (!qrCanvasHidden.value && retryCount < maxRetries) {
+        console.log(`等待隐藏Canvas元素...重试 ${retryCount + 1}/${maxRetries}`);
+        await new Promise(resolve => setTimeout(resolve, 100));
+        await nextTick();
+        retryCount++;
       }
       
-      // 先清空canvas
-      const ctx = qrCanvas.value.getContext('2d');
-      ctx.clearRect(0, 0, qrCanvas.value.width, qrCanvas.value.height);
-      
-      // 生成二维码到canvas
-      await QRCode.toCanvas(qrCanvas.value, qrConfig.text, options);
-      
-      // 获取DataURL
-      qrCodeDataURL.value = qrCanvas.value.toDataURL('image/png');
-      console.log('PNG生成成功，DataURL长度:', qrCodeDataURL.value.length);
+      if (!qrCanvasHidden.value) {
+        console.error('隐藏Canvas元素始终未找到，尝试使用DataURL方式');
+        try {
+          // 直接使用DataURL方式
+          qrCodeDataURL.value = await QRCode.toDataURL(qrConfig.text, options);
+          console.log('DataURL方式生成成功，长度:', qrCodeDataURL.value.length);
+        } catch (dataUrlError) {
+          console.error('DataURL方式也失败:', dataUrlError);
+          message.value = '生成二维码失败，请刷新页面重试';
+          return;
+        }
+      } else {
+        console.log('隐藏Canvas元素找到:', qrCanvasHidden.value);
+        
+        try {
+          // 先生成到隐藏Canvas
+          await QRCode.toCanvas(qrCanvasHidden.value, qrConfig.text, options);
+          
+          // 获取DataURL
+          qrCodeDataURL.value = qrCanvasHidden.value.toDataURL('image/png');
+          console.log('PNG生成成功，DataURL长度:', qrCodeDataURL.value.length);
+          
+          // 尝试复制到显示Canvas（如果存在）
+          await nextTick(); // 确保显示Canvas已渲染
+          if (qrCanvas.value) {
+            const displayCtx = qrCanvas.value.getContext('2d');
+            qrCanvas.value.width = qrCanvasHidden.value.width;
+            qrCanvas.value.height = qrCanvasHidden.value.height;
+            displayCtx.drawImage(qrCanvasHidden.value, 0, 0);
+            console.log('已复制到显示Canvas');
+          }
+          
+        } catch (canvasError) {
+          console.error('Canvas生成二维码失败:', canvasError);
+          
+          // 如果Canvas失败，尝试使用DataURL方式
+          console.log('尝试使用DataURL方式生成...');
+          qrCodeDataURL.value = await QRCode.toDataURL(qrConfig.text, options);
+          console.log('DataURL方式生成成功，长度:', qrCodeDataURL.value.length);
+        }
+      }
     }
 
     // 添加到历史记录
@@ -542,22 +599,41 @@ const downloadQR = () => {
 };
 
 const copyToClipboard = async () => {
-  if (!qrCanvas.value) return;
+  console.log('开始复制二维码到剪贴板...');
+  
+  // 优先使用隐藏Canvas，如果不存在则使用显示Canvas
+  const canvas = qrCanvasHidden.value || qrCanvas.value;
+  
+  if (!canvas && !qrCodeDataURL.value) {
+    message.value = '没有二维码可复制';
+    setTimeout(() => message.value = '', 3000);
+    return;
+  }
 
   try {
-    const canvas = qrCanvas.value;
-    canvas.toBlob(async (blob) => {
-      try {
-        const item = new ClipboardItem({ 'image/png': blob });
-        await navigator.clipboard.write([item]);
-        message.value = '二维码已复制到剪贴板！';
-        setTimeout(() => message.value = '', 3000);
-      } catch (error) {
-        console.error('复制失败:', error);
-        message.value = '复制失败，请手动保存';
-        setTimeout(() => message.value = '', 3000);
-      }
-    });
+    if (canvas) {
+      // 使用Canvas复制
+      canvas.toBlob(async (blob) => {
+        try {
+          const item = new ClipboardItem({ 'image/png': blob });
+          await navigator.clipboard.write([item]);
+          message.value = '二维码已复制到剪贴板！';
+          setTimeout(() => message.value = '', 3000);
+        } catch (error) {
+          console.error('复制失败:', error);
+          message.value = '复制失败，请手动保存';
+          setTimeout(() => message.value = '', 3000);
+        }
+      });
+    } else if (qrCodeDataURL.value) {
+      // 使用DataURL复制
+      const response = await fetch(qrCodeDataURL.value);
+      const blob = await response.blob();
+      const item = new ClipboardItem({ 'image/png': blob });
+      await navigator.clipboard.write([item]);
+      message.value = '二维码已复制到剪贴板！';
+      setTimeout(() => message.value = '', 3000);
+    }
   } catch (error) {
     console.error('复制失败:', error);
     message.value = '复制失败，请手动保存';
