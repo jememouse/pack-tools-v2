@@ -83,6 +83,13 @@ const tools = ref([
     path: '/tools/paper-weight-thickness-converter',
   },
   {
+    name: '不规则线长计算器',
+    description: '上传SVG文件，精确计算各种图形元素的线长，支持多种几何形状。',
+    icon: Ruler,
+    category: '技术查询',
+    path: '/tools/irregular-line-length',
+  },
+  {
     name: '包装材料数据库(Mini)',
     description: '快速查询最核心包装材料的特性、用途和成本级别。',
     icon: Book,

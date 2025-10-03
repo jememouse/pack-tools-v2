@@ -82,6 +82,11 @@ const routes = [
     name: 'QRCodeGenerator',
     component: QRCodeGeneratorView,
   },
+  {
+    path: '/tools/irregular-line-length',
+    name: 'IrregularLineLengthCalculator',
+    component: () => import('../views/IrregularLineLengthCalculatorView.vue'),
+  },
   // Knowledge routes
   {
     path: '/knowledge/rgb-vs-cmyk',
