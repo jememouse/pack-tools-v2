@@ -11,6 +11,7 @@ import PackagingMaterialDatabaseView from '../views/PackagingMaterialDatabaseVie
 import PrepressChecklistView from '../views/PrepressChecklistView.vue';
 import ProjectTimelineEstimatorView from '../views/ProjectTimelineEstimatorView.vue';
 import QRCodeGeneratorView from '../views/QRCodeGeneratorView.vue';
+import PackagingStandardsView from '../views/PackagingStandardsView.vue';
 // Knowledge pages
 import { 
   RgbVsCmykView,
@@ -112,6 +113,11 @@ const routes = [
     path: '/knowledge/fsc',
     name: 'KnowledgeFSC',
     component: FSCView,
+  },
+  {
+    path: '/knowledge/packaging-standards',
+    name: 'PackagingStandards',
+    component: PackagingStandardsView,
   },
 ];
 

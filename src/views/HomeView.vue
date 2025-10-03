@@ -169,6 +169,13 @@ const knowledgeBase = ref([
     emoji: '🌳',
     path: '/knowledge/fsc',
   },
+  {
+    module: '行业标准与规范速查',
+    title: '包装加工行业标准知识库',
+    description: '涵盖国际标准(ISO/ASTM)、中国国标(GB/T)、欧美日标准的完整体系，包含材料、设计、环保、运输、食品包装等各领域标准。',
+    emoji: '📚',
+    path: '/knowledge/packaging-standards',
+  },
 ]);
 
 const slugify = (text) => {

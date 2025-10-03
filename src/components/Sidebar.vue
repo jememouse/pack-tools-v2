@@ -46,6 +46,9 @@ const scrollTo = (id) => {
           <li>
             <a href="#knowledge-base" @click.prevent="scrollTo('knowledge-base')" class="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5">知识库</a>
           </li>
+          <li>
+            <router-link to="/knowledge/packaging-standards" class="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">📚 包装标准库</router-link>
+          </li>
         </ul>
       </div>
       <div>
