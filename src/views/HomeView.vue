@@ -37,6 +37,13 @@ const tools = ref([
     path: '/tools/volume-weight-calculator',
   },
   {
+    name: '多功能包装计算器',
+    description: '集成常规、科学、包装专业和设计计算功能。支持材料用量、成本核算、拼版效率、黄金比例等专业计算。',
+    icon: Calculator,
+    category: '通用基础',
+    path: '/tools/calculator',
+  },
+  {
     name: '简易拼版计算器',
     description: '快速估算一张大纸上最多能拼多少成品，为成本核算和纸张采购提供关键依据。',
     icon: LayoutGrid,

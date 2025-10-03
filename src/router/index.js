@@ -13,6 +13,7 @@ import ProjectTimelineEstimatorView from '../views/ProjectTimelineEstimatorView.
 import QRCodeGeneratorView from '../views/QRCodeGeneratorView.vue';
 import PackagingStandardsView from '../views/PackagingStandardsView.vue';
 import ColorRecommendationView from '../views/ColorRecommendationView.vue';
+import CalculatorView from '../views/CalculatorView.vue';
 // Knowledge pages
 import { 
   RgbVsCmykView,
@@ -88,6 +89,11 @@ const routes = [
     path: '/tools/color-recommendation',
     name: 'ColorRecommendation',
     component: ColorRecommendationView,
+  },
+  {
+    path: '/tools/calculator',
+    name: 'Calculator',
+    component: CalculatorView,
   },
   // Knowledge routes
   {
