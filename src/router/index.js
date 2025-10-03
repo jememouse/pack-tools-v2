@@ -11,6 +11,15 @@ import PackagingMaterialDatabaseView from '../views/PackagingMaterialDatabaseVie
 import PrepressChecklistView from '../views/PrepressChecklistView.vue';
 import ProjectTimelineEstimatorView from '../views/ProjectTimelineEstimatorView.vue';
 import QRCodeGeneratorView from '../views/QRCodeGeneratorView.vue';
+// Knowledge pages
+import { 
+  RgbVsCmykView,
+  DeltaEView,
+  BleedView,
+  GrammageThicknessView,
+  MaterialsOverviewView,
+  FSCView
+} from '../views/knowledge';
 
 const routes = [
   {
@@ -72,6 +81,37 @@ const routes = [
     path: '/tools/qr-code-generator',
     name: 'QRCodeGenerator',
     component: QRCodeGeneratorView,
+  },
+  // Knowledge routes
+  {
+    path: '/knowledge/rgb-vs-cmyk',
+    name: 'KnowledgeRgbVsCmyk',
+    component: RgbVsCmykView,
+  },
+  {
+    path: '/knowledge/delta-e',
+    name: 'KnowledgeDeltaE',
+    component: DeltaEView,
+  },
+  {
+    path: '/knowledge/bleed',
+    name: 'KnowledgeBleed',
+    component: BleedView,
+  },
+  {
+    path: '/knowledge/grammage-thickness',
+    name: 'KnowledgeGrammageThickness',
+    component: GrammageThicknessView,
+  },
+  {
+    path: '/knowledge/materials-overview',
+    name: 'KnowledgeMaterialsOverview',
+    component: MaterialsOverviewView,
+  },
+  {
+    path: '/knowledge/fsc',
+    name: 'KnowledgeFSC',
+    component: FSCView,
   },
 ];
 

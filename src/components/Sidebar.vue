@@ -6,6 +6,26 @@ const props = defineProps({
   categories: Array,
   slugify: Function,
 });
+
+const scrollTo = (id) => {
+  const el = document.getElementById(id);
+  if (el) {
+    // 找到主内容滚动容器
+    const mainContainer = document.querySelector('main');
+    if (mainContainer) {
+      // 计算元素相对于容器的位置
+      const elementTop = el.offsetTop;
+      // 滚动到目标位置，考虑 scroll-mt-24 的偏移（约96px）
+      mainContainer.scrollTo({
+        top: elementTop - 100, // 减去一些偏移量确保标题可见
+        behavior: 'smooth'
+      });
+    } else {
+      // 备用方案
+      el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+};
 </script>
 
 <template>
@@ -24,7 +44,7 @@ const props = defineProps({
             <a href="/" class="block rounded-md px-3 py-2 text-sm font-medium text-white bg-white/10">工具</a>
           </li>
           <li>
-            <a href="#" class="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5">知识库</a>
+            <a href="#knowledge-base" @click.prevent="scrollTo('knowledge-base')" class="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5">知识库</a>
           </li>
         </ul>
       </div>
@@ -32,7 +52,7 @@ const props = defineProps({
         <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">本页导航</h3>
         <ul class="space-y-1">
           <li v-for="category in categories" :key="category">
-            <a :href="'#' + slugify(category)" class="block rounded-md px-3 py-2 text-sm text-gray-300 hover:bg-white/5">{{ category }}</a>
+            <a :href="'#' + slugify(category)" @click.prevent="scrollTo(slugify(category))" class="block rounded-md px-3 py-2 text-sm text-gray-300 hover:bg-white/5">{{ category }}</a>
           </li>
         </ul>
       </div>
