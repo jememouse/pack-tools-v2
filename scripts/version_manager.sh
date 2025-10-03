@@ -9,18 +9,21 @@ if [[ ! "$TYPE" =~ ^(patch|minor|major)$ ]]; then
     echo "Usage: $0 [patch|minor|major]"
     echo ""
     echo "Current version info:"
-    echo "  Git tag: $(git describe --tags --abbrev=0 2>/dev/null || echo 'none')"
+    LATEST_TAG=$(git tag --list --sort=-version:refname | head -1 || echo "")
+    LATEST_TAG=${LATEST_TAG:-v0.0.0}
+    echo "  Git tag: $LATEST_TAG"
     echo "  package.json: $(grep '"version"' package.json | cut -d'"' -f4)"
     echo ""
     echo "Examples:"
-    echo "  $0 patch   # v0.1.0 -> v0.1.1 (bug fixes)"
-    echo "  $0 minor   # v0.1.1 -> v0.2.0 (new features)"
-    echo "  $0 major   # v0.2.0 -> v1.0.0 (breaking changes)"
+    echo "  $0 patch   # $LATEST_TAG -> next patch (bug fixes)"
+    echo "  $0 minor   # $LATEST_TAG -> next minor (new features)"
+    echo "  $0 major   # $LATEST_TAG -> next major (breaking changes)"
     exit 1
 fi
 
 # Get current version from git tags
-CURRENT=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+CURRENT=$(git tag --list --sort=-version:refname | head -1 || echo "")
+CURRENT=${CURRENT:-v0.0.0}
 echo "Current version: $CURRENT"
 
 # Parse version numbers
