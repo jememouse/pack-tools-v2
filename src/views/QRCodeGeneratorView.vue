@@ -422,7 +422,7 @@ onMounted(async () => {
   loadHistory();
   // 添加初始演示内容
   if (!qrConfig.text) {
-    qrConfig.text = 'https://github.com/jememouse/pack-tools-v2';
+    qrConfig.text = 'https://tools.heyijiapack.com';
   }
   
   // 等待DOM完全渲染
