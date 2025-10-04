@@ -4,3 +4,4 @@ export { default as BleedView } from './BleedView.vue';
 export { default as GrammageThicknessView } from './GrammageThicknessView.vue';
 export { default as MaterialsOverviewView } from './MaterialsOverviewView.vue';
 export { default as FSCView } from './FSCView.vue';
+export { default as ProductPackagingLifecycleView } from './ProductPackagingLifecycleView.vue';

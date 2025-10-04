@@ -191,6 +191,13 @@ const knowledgeBase = ref([
     emoji: '📚',
     path: '/knowledge/packaging-standards',
   },
+  {
+    module: '商业策略与市场',
+    title: '商品与包装生命周期关联',
+    description: '深入理解商品从引入期到衰退期各阶段的市场特征，及对应的包装策略调整。包含实际案例和最佳实践指导。',
+    emoji: '📈',
+    path: '/knowledge/product-packaging-lifecycle',
+  },
 ]);
 
 const slugify = (text) => {

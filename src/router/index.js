@@ -21,7 +21,8 @@ import {
   BleedView,
   GrammageThicknessView,
   MaterialsOverviewView,
-  FSCView
+  FSCView,
+  ProductPackagingLifecycleView
 } from '../views/knowledge';
 
 const routes = [
@@ -130,6 +131,11 @@ const routes = [
     path: '/knowledge/packaging-standards',
     name: 'PackagingStandards',
     component: PackagingStandardsView,
+  },
+  {
+    path: '/knowledge/product-packaging-lifecycle',
+    name: 'ProductPackagingLifecycle',
+    component: ProductPackagingLifecycleView,
   },
 ];
 

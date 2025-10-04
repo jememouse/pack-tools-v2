@@ -177,7 +177,8 @@ export function initializeDefaultLikes() {
       'knowledge-grammage-thickness': 55,
       'knowledge-materials-overview': 47,
       'knowledge-fsc': 34,
-      'knowledge-packaging-standards': 28
+      'knowledge-packaging-standards': 28,
+      'knowledge-product-packaging-lifecycle': 22
     }
     
     setInitialLikes(defaultLikes)
