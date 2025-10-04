@@ -1,11 +1,15 @@
 <script setup>
 import { defineProps } from 'vue';
 import { Package2 } from 'lucide-vue-next';
+import { useRouter, useRoute } from 'vue-router';
 
 const props = defineProps({
   categories: Array,
   slugify: Function,
 });
+
+const router = useRouter();
+const route = useRoute();
 
 const scrollTo = (id) => {
   const el = document.getElementById(id);
@@ -26,6 +30,22 @@ const scrollTo = (id) => {
     }
   }
 };
+
+// 处理知识库导航
+const navigateToKnowledgeBase = () => {
+  if (route.path === '/') {
+    // 如果已经在首页，直接滚动到知识库部分
+    scrollTo('knowledge-base');
+  } else {
+    // 如果在其他页面，先跳转到首页，然后滚动到知识库部分
+    router.push('/').then(() => {
+      // 使用 nextTick 确保页面完全加载后再滚动
+      setTimeout(() => {
+        scrollTo('knowledge-base');
+      }, 100);
+    });
+  }
+};
 </script>
 
 <template>
@@ -44,7 +64,7 @@ const scrollTo = (id) => {
             <a href="/" class="block rounded-md px-3 py-2 text-sm font-medium text-white bg-white/10">工具</a>
           </li>
           <li>
-            <a href="#knowledge-base" @click.prevent="scrollTo('knowledge-base')" class="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5">知识库</a>
+            <a href="#" @click.prevent="navigateToKnowledgeBase()" class="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5">知识库</a>
           </li>
           <li>
             <router-link to="/knowledge/packaging-standards" class="block rounded-md px-3 py-2 text-sm font-medium text-gray-300 hover:bg-white/5 hover:text-white">📚 包装标准库</router-link>
