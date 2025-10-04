@@ -1,6 +1,8 @@
 <script setup>
-import { reactive, ref, computed } from 'vue';
+import { reactive, ref, computed, onMounted } from 'vue';
 import { Copy, RotateCcw, Info, Ruler, Scale, Thermometer, Calculator, History, Bookmark } from 'lucide-vue-next';
+import LikeButton from '../components/LikeButton.vue';
+import { initializeDefaultLikes } from '../services/likeService.js';
 
 const activeTab = ref('length');
 const showKnowledge = ref(false);
@@ -263,6 +265,20 @@ function addToFavorites(unitType, unit, value) {
     favorites.value.pop();
   }
 }
+
+// 初始化和点赞相关函数
+onMounted(() => {
+  initializeDefaultLikes();
+});
+
+// 处理点赞变化
+const handleLikeChanged = (data) => {
+  console.log('点赞变化:', data);
+  if (data.liked) {
+    copyStatus.value = '感谢您的支持！💖';
+    setTimeout(() => copyStatus.value = '', 2000);
+  }
+};
 </script>
 
 <template>
@@ -282,6 +298,14 @@ function addToFavorites(unitType, unit, value) {
             </button>
           </h1>
           <p class="mt-2 text-gray-300">支持长度、重量、压力、克重、厚度、温度、面积等包装行业常用单位的实时换算。</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <!-- 点赞组件 -->
+          <LikeButton 
+            item-id="unit-converter"
+            :initial-count="95"
+            @like-changed="handleLikeChanged"
+          />
         </div>
       </div>
     </div>

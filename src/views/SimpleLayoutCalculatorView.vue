@@ -1,6 +1,8 @@
 <script setup>
-import { reactive, ref, computed, nextTick } from 'vue';
+import { reactive, ref, computed, nextTick, onMounted } from 'vue';
 import { Copy, RotateCcw, Info } from 'lucide-vue-next';
+import LikeButton from '../components/LikeButton.vue';
+import { initializeDefaultLikes } from '../services/likeService.js';
 
 const product = reactive({
   width: '',
@@ -161,6 +163,20 @@ async function copyResult() {
     setTimeout(() => copyStatus.value = '', 2000);
   }
 }
+
+// 初始化和点赞相关函数
+onMounted(() => {
+  initializeDefaultLikes();
+});
+
+// 处理点赞变化
+const handleLikeChanged = (data) => {
+  console.log('点赞变化:', data);
+  if (data.liked) {
+    copyStatus.value = '感谢您的支持！💖';
+    setTimeout(() => copyStatus.value = '', 2000);
+  }
+};
 </script>
 
 <template>
@@ -180,6 +196,14 @@ async function copyResult() {
             </button>
           </h1>
           <p class="mt-2 text-gray-300">快速估算一张大纸上最多能拼多少成品，为成本核算和纸张采购提供关键依据。</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <!-- 点赞组件 -->
+          <LikeButton 
+            item-id="simple-layout-calculator"
+            :initial-count="76"
+            @like-changed="handleLikeChanged"
+          />
         </div>
       </div>
     </div>

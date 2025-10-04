@@ -19,6 +19,14 @@
             快速生成高分辨率、适合印刷的二维码，支持多种格式和尺寸定制。
           </p>
         </div>
+        <div class="flex items-center gap-4">
+          <!-- 点赞组件 -->
+          <LikeButton 
+            item-id="qr-code-generator"
+            :initial-count="128"
+            @like-changed="handleLikeChanged"
+          />
+        </div>
       </div>
     </div>
 
@@ -341,6 +349,8 @@
 <script setup>
 import { ref, reactive, onMounted, nextTick } from 'vue';
 import QRCode from 'qrcode';
+import LikeButton from '../components/LikeButton.vue';
+import { initializeDefaultLikes } from '../services/likeService.js';
 import { 
   QrCode, 
   Info, 
@@ -419,6 +429,9 @@ const sizes = ref([
 ]);
 
 onMounted(async () => {
+  // 初始化点赞数据
+  initializeDefaultLikes();
+  
   loadHistory();
   // 添加初始演示内容
   if (!qrConfig.text) {
@@ -699,6 +712,16 @@ const loadHistory = () => {
     }
   } catch (error) {
     console.error('加载历史记录失败:', error);
+  }
+};
+
+// 处理点赞变化
+const handleLikeChanged = (data) => {
+  console.log('点赞变化:', data);
+  // 可以在这里添加一些反馈，比如显示感谢信息
+  if (data.liked) {
+    message.value = '感谢您的支持！💖';
+    setTimeout(() => message.value = '', 2000);
   }
 };
 </script>

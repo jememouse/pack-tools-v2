@@ -1,6 +1,8 @@
 <script setup>
-import { reactive, ref, computed } from 'vue';
+import { reactive, ref, computed, onMounted } from 'vue';
 import { Copy, RotateCcw, Info, Package, Calculator } from 'lucide-vue-next';
+import LikeButton from '../components/LikeButton.vue';
+import { initializeDefaultLikes } from '../services/likeService.js';
 
 const dimensions = reactive({
   length: '',
@@ -285,6 +287,20 @@ ${estimatedCost.value ? `预估费用：${estimatedCost.value.total} 元` : ''}`
     setTimeout(() => copyStatus.value = '', 2000);
   }
 }
+
+// 初始化和点赞相关函数
+onMounted(() => {
+  initializeDefaultLikes();
+});
+
+// 处理点赞变化
+const handleLikeChanged = (data) => {
+  console.log('点赞变化:', data);
+  if (data.liked) {
+    copyStatus.value = '感谢您的支持！💖';
+    setTimeout(() => copyStatus.value = '', 2000);
+  }
+};
 </script>
 
 <template>
@@ -304,6 +320,14 @@ ${estimatedCost.value ? `预估费用：${estimatedCost.value.total} 元` : ''}`
             </button>
           </h1>
           <p class="mt-2 text-gray-300">输入长度、宽度、高度和实际重量，自动计算体积重并给出计费重量。</p>
+        </div>
+        <div class="flex items-center gap-4">
+          <!-- 点赞组件 -->
+          <LikeButton 
+            item-id="volume-weight-calculator"
+            :initial-count="87"
+            @like-changed="handleLikeChanged"
+          />
         </div>
       </div>
     </div>

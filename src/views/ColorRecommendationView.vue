@@ -3,12 +3,26 @@
     <div class="container mx-auto px-4 py-8 max-w-7xl">
       <!-- 页面标题 -->
       <div class="text-center mb-12">
-        <h1 class="text-4xl font-bold text-white mb-4">
-          🎨 色彩智能推荐工具
-        </h1>
+        <div class="flex items-center justify-center mb-4">
+          <h1 class="text-4xl font-bold text-white">
+            🎨 色彩智能推荐工具
+          </h1>
+          <div class="ml-6">
+            <!-- 点赞组件 -->
+            <LikeButton 
+              item-id="color-recommendation"
+              :initial-count="38"
+              @like-changed="handleLikeChanged"
+            />
+          </div>
+        </div>
         <p class="text-lg text-gray-300 max-w-3xl mx-auto">
           专为包装设计师打造的智能配色系统。输入一个基础色彩，即可获得专业的配色方案、渐变组合和包装应用建议。
         </p>
+        <!-- 点赞反馈消息 -->
+        <div v-if="likeMessage" class="mt-4 text-pink-300 font-medium">
+          {{ likeMessage }}
+        </div>
       </div>
 
       <!-- 核心工具组件 -->
@@ -175,7 +189,25 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from 'vue'
 import ColorRecommendationTool from '../components/ColorRecommendationTool.vue'
+import LikeButton from '../components/LikeButton.vue'
+import { initializeDefaultLikes } from '../services/likeService.js'
+
+const likeMessage = ref('')
+
+onMounted(() => {
+  initializeDefaultLikes()
+})
+
+// 处理点赞变化
+const handleLikeChanged = (data) => {
+  console.log('点赞变化:', data)
+  if (data.liked) {
+    likeMessage.value = '感谢您的支持！🌈'
+    setTimeout(() => likeMessage.value = '', 2000)
+  }
+}
 </script>
 
 <style scoped>

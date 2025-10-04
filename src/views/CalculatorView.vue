@@ -16,7 +16,14 @@
             <h1 class="text-xl font-bold text-gray-900">多功能包装计算器</h1>
             <p class="text-sm text-gray-500">集成常规、科学、包装、设计专业计算</p>
           </div>
-          <div class="w-20"></div> <!-- 占位元素，保持居中 -->
+          <div class="flex items-center">
+            <!-- 点赞组件 -->
+            <LikeButton 
+              item-id="calculator"
+              :initial-count="15"
+              @like-changed="handleLikeChanged"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -132,10 +139,24 @@
 </template>
 
 <script setup>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import PackagingCalculator from '../components/PackagingCalculator.vue'
+import LikeButton from '../components/LikeButton.vue'
+import { initializeDefaultLikes } from '../services/likeService.js'
+
+const likeMessage = ref('')
 
 onMounted(() => {
   document.title = '多功能包装计算器 - 包装工具网'
+  initializeDefaultLikes()
 })
+
+// 处理点赞变化
+const handleLikeChanged = (data) => {
+  console.log('点赞变化:', data)
+  if (data.liked) {
+    likeMessage.value = '感谢您的支持！💖'
+    setTimeout(() => likeMessage.value = '', 2000)
+  }
+}
 </script>

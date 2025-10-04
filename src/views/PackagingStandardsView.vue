@@ -14,7 +14,8 @@ import {
   ExternalLink,
   ArrowRight,
   ChevronDown,
-  ChevronRight
+  ChevronRight,
+  Palette
 } from 'lucide-vue-next';
 
 // 搜索和过滤状态
@@ -32,6 +33,7 @@ const categories = [
   '日本工业标准',
   '包装材料标准',
   '包装设计标准',
+  '包装色彩标准',
   '环保与可持续性标准',
   '运输包装标准',
   '食品包装标准'
@@ -233,6 +235,122 @@ const packagingStandards = ref([
     ]
   },
   {
+    category: '包装色彩标准',
+    icon: Palette,
+    color: 'purple',
+    description: '色彩管理、印刷标准、色彩测量与控制规范',
+    standards: [
+      {
+        id: 'iso-12647-2',
+        title: 'ISO 12647-2:2013 - 胶印色彩控制',
+        standardNumber: 'ISO 12647-2:2013',
+        description: '胶印过程中的色彩控制标准，规定了四色胶印的印刷条件、色彩特性和质量控制要求。',
+        application: '胶印包装印刷',
+        keyPoints: ['印刷条件标准化', 'Lab色彩空间', '色密度控制', '网点增大补偿', 'G7校准方法'],
+        importance: '确保胶印包装产品色彩一致性和质量稳定性的国际标准'
+      },
+      {
+        id: 'iso-12647-6',
+        title: 'ISO 12647-6:2012 - 柔印色彩控制',
+        standardNumber: 'ISO 12647-6:2012',
+        description: '柔版印刷色彩控制标准，适用于包装印刷中的柔印工艺，规定了印刷条件和色彩参数。',
+        application: '柔印包装印刷',
+        keyPoints: ['柔印工艺特点', '承印材料适应性', '油墨转移控制', '印版质量要求', '色彩稳定性'],
+        importance: '柔印包装行业色彩标准化的重要依据'
+      },
+      {
+        id: 'iso-13655',
+        title: 'ISO 13655:2017 - 印刷技术色彩测量',
+        standardNumber: 'ISO 13655:2017',
+        description: '印刷品色彩测量的标准方法，规定了测量条件、仪器要求和数据处理方法。',
+        application: '色彩品质检测',
+        keyPoints: ['测量几何条件', '标准光源', '白点校准', '测量精度', '数据处理标准'],
+        importance: '确保色彩测量结果准确性和可比性的基础标准'
+      },
+      {
+        id: 'iso-3664',
+        title: 'ISO 3664:2009 - 图像技术观察条件',
+        standardNumber: 'ISO 3664:2009',
+        description: '图像和印刷品观察的标准照明条件，确保色彩评价的一致性和准确性。',
+        application: '色彩评价环境',
+        keyPoints: ['标准光源D50/D65', '照度要求2000lux', '色温稳定性', '显色指数Ra>90', '环境光控制'],
+        importance: '建立标准化色彩评价环境的关键标准'
+      },
+      {
+        id: 'gb-t-17934',
+        title: 'GB/T 17934.1-2003 - 印刷技术网点增大测量',
+        standardNumber: 'GB/T 17934.1-2003',
+        description: '中国印刷行业网点增大测量标准，规定了网点增大的定义、测量方法和控制范围。',
+        application: '印刷质量控制',
+        keyPoints: ['网点增大定义', 'Murray-Davies公式', '测量方法标准', '控制范围', '补偿曲线'],
+        importance: '中国印刷行业网点质量控制的基础标准'
+      },
+      {
+        id: 'fogra-pso',
+        title: 'FOGRA PSO - 印刷标准化',
+        standardNumber: 'FOGRA PSO',
+        description: 'FOGRA印刷标准化认证体系，基于ISO 12647系列标准，提供完整的印刷过程控制方案。',
+        application: '印刷过程标准化',
+        keyPoints: ['过程控制', '质量认证', '标准化实施', '数据管理', '持续改进'],
+        importance: '欧洲印刷行业广泛采用的标准化认证体系'
+      },
+      {
+        id: 'pantone-matching-system',
+        title: 'Pantone配色系统 - 专色标准',
+        standardNumber: 'PMS',
+        description: '全球通用的专色标准体系，提供标准化的色彩参考和配方，广泛应用于包装印刷。',
+        application: '专色印刷',
+        keyPoints: ['标准色卡', '色彩配方', 'Lab数值', '油墨调配', '国际通用性'],
+        importance: '全球包装印刷专色应用的事实标准'
+      },
+      {
+        id: 'cie-lab',
+        title: 'CIE L*a*b* 色彩空间标准',
+        standardNumber: 'CIE 015:2018',
+        description: 'CIE Lab色彩空间的定义和应用标准，为色彩测量和管理提供科学基础。',
+        application: '色彩测量与管理',
+        keyPoints: ['设备无关色彩空间', '色差计算△E', '视觉均匀性', '色域映射', '色彩管理工作流'],
+        importance: '现代色彩管理系统的理论基础和技术标准'
+      },
+      {
+        id: 'iso-12640',
+        title: 'ISO 12640 系列 - 印前数据交换',
+        standardNumber: 'ISO 12640-1~5',
+        description: '印前制作和数据交换的色彩标准，规定了图像文件的色彩特征描述方法。',
+        application: '印前色彩管理',
+        keyPoints: ['色彩特征描述', 'ICC色彩管理', '图像交换格式', '工作流程', '质量控制'],
+        importance: '确保印前到印刷全流程色彩一致性的重要标准'
+      },
+      {
+        id: 'gb-t-7705',
+        title: 'GB/T 7705-2008 - 印刷品颜色表示方法',
+        standardNumber: 'GB/T 7705-2008',
+        description: '中国印刷品颜色表示和测量的国家标准，规定了颜色参数和测量条件。',
+        application: '印刷品色彩规范',
+        keyPoints: ['色彩表示方法', '测量条件', 'Lab色空间应用', '色差评价', '质量分级'],
+        importance: '中国印刷行业色彩标准化的基础规范'
+      },
+      {
+        id: 'gracol-g7',
+        title: 'GRACoL G7 - 灰平衡校准',
+        standardNumber: 'GRACoL G7',
+        description: '基于灰平衡的印刷校准方法，通过中性灰控制实现不同印刷条件下的视觉匹配。',
+        application: '印刷校准',
+        keyPoints: ['灰平衡控制', '视觉匹配', 'NPDC曲线', '多条件适应', '快速校准'],
+        importance: '北美印刷行业广泛采用的校准标准，提高不同设备间色彩一致性'
+      },
+      {
+        id: 'iso-15076',
+        title: 'ISO 15076 系列 - 图像技术色彩管理',
+        standardNumber: 'ISO 15076-1',
+        description: '图像技术中的色彩管理架构标准，定义了色彩管理系统的基本概念和实施方法。',
+        application: '色彩管理系统',
+        keyPoints: ['色彩管理架构', 'ICC配置文件', '设备校准', '色彩转换', '质量保证'],
+        importance: '建立完整色彩管理工作流程的指导标准'
+      }
+    ]
+  },
+  {
     category: '环保与可持续性标准',
     icon: Leaf,
     color: 'green',
@@ -376,7 +494,7 @@ const totalCategories = computed(() => packagingStandards.value.length);
       </div>
       <p class="text-lg text-gray-300 max-w-3xl mx-auto mb-8">
         涵盖国际标准(ISO/ASTM)、中国国标(GB/T)、欧美日标准的完整体系，
-        包含材料、设计、环保、运输、食品包装等各领域标准。助您快速查找和理解相关标准要求。
+        包含材料、设计、色彩管理、环保、运输、食品包装等各领域标准。助您快速查找和理解相关标准要求。
       </p>
       
       <!-- 统计信息 -->
